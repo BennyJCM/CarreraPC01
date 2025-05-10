@@ -11,37 +11,40 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import esan.carrera.pc01.screen.PantallaMenu
+import esan.carrera.pc01.screen.CalculadoraEdadScreen
+import esan.carrera.pc01.screen.ConversorDivisasScreen
+import esan.carrera.pc01.screen.CatalogoProductosScreen
 import esan.carrera.pc01.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge() // Para diseño sin bordes
         setContent {
             MyApplicationTheme {
+                // Controlador de navegación
+                val navController = rememberNavController()
+
+                // Usamos Scaffold para la estructura de la pantalla
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    // NavHost para gestionar la navegación entre las pantallas
+                    NavHost(
+                        navController = navController,
+                        startDestination = "menu", // Pantalla inicial
                         modifier = Modifier.padding(innerPadding)
-                    )
+                    ) {
+                        composable("menu") { PantallaMenu(navController) }
+                        composable("edad_perro") { CalculadoraEdadScreen() }
+                        composable("conversor_divisas") { ConversorDivisasScreen() }
+                        composable("catalogo") { CatalogoProductosScreen() }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MyApplicationTheme {
-        Greeting("Android")
     }
 }
